@@ -31,7 +31,7 @@ def CalcThebestEmoji(Pixlist, listEmoji) :
         MinList = []
         x = 0
         y = 0
-        for i in range(len(listeEmoji)) :
+        for i in range(len(listEmoji)) :
             diff = 0
             diff += abs(rgb[0] - int(listeEmoji[i][2]))
             diff += abs(rgb[1] - int(listeEmoji[i][3]))
