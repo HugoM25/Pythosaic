@@ -19,7 +19,7 @@ The project is not in its final state, I will continue to improve it, don't hesi
 
 Thanks!
 
-PS : If variables are named emojis it's because the project was basically just for that but I wanted to extend it. 
+PS : If variables are named emojis it's because the project was basically just for that but I wanted to extend it. I'll change them later.
 
 
 
