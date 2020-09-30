@@ -7,4 +7,5 @@
 It is a large image composed by combining other small images . 
 
 ## How to use it ? 
-To use it just download the project and use a python interpreter. 
+To use it just download the project and use a python interpreter. more infos coming soon
+
