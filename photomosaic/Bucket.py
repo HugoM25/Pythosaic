@@ -1,3 +1,6 @@
+import random
+
+
 class Bucket:
     def __init__(self, elements=[]):
         self.elements = elements
@@ -24,3 +27,12 @@ class Bucket:
         self.elements.append(element)
         # Need to update average color
         self.average_color = self.calculate_average_color()
+
+    def get_random_element(self):
+        return random.choice(self.elements)
+
+    def __str__(self):
+        return "Bucket: " + str(self.average_color) + " " + str(len(self.elements))
+
+    def __repr__(self):
+        return str(self)
