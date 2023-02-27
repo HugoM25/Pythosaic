@@ -6,7 +6,7 @@ class Element:
         self.image = image
         self.color = self.compute_mean_color(image)
         self.size = size
-        self.used_count = 0
+        self.use_count = 0
 
     def compute_mean_color(self, image: np.ndarray) -> tuple:
         """

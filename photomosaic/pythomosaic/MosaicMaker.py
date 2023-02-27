@@ -9,11 +9,13 @@ from .BucketsHandler import BucketsHandler
 
 
 class Maker:
-    def __init__(self, image_loader: ImageLoader) -> None:
+    def __init__(self, image_loader: ImageLoader, bucket_pick_method: str = "random") -> None:
         self.image_loader = image_loader
         # Load elements in buckets
         self.buckets_handler = BucketsHandler()
         self.buckets_handler.elements_to_buckets(self.image_loader.elements)
+
+        self.bucket_pick_method = bucket_pick_method
 
     def build_construction_matrix(self, image: np.ndarray) -> np.ndarray:
         """
@@ -34,7 +36,7 @@ class Maker:
 
         return closest_bucket_indices.reshape((image.shape[0], image.shape[1]))
 
-    def build_img_from_matrix(self, matrix: np.ndarray, size_img: tuple) -> np.ndarray:
+    def build_img_from_matrix(self, matrix: np.ndarray, image: np.ndarray, size_img: tuple) -> np.ndarray:
         """
         Build the final image from the construction matrix
         :param matrix: the construction matrix
@@ -54,7 +56,8 @@ class Maker:
         for i in range(height):
             for j in range(width):
                 bucket = self.buckets_handler.buckets[matrix[i, j]]
-                element = bucket.get_random_element()
+                element = bucket.get_element(
+                    method="random", color=image[i, j])
                 final_image_result[i*size_img[0]:(i+1)*size_img[0],
                                    j*size_img[1]:(j+1)*size_img[1], :] = cv2.resize(element.image, size_img)
         return final_image_result
@@ -67,5 +70,8 @@ class Maker:
         """
         matrix = self.build_construction_matrix(image)
         img_result = self.build_img_from_matrix(
-            matrix, (30, 30))
+            matrix,
+            image,
+            (30, 30)
+        )
         return img_result

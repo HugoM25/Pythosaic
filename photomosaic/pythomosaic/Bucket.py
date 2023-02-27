@@ -59,12 +59,27 @@ class Bucket:
             return self.get_random_element()
 
     def get_random_element(self) -> Element:
+        """
+        Get a random element from the bucket
+        :return: an element
+        """
         return random.choice(self.elements)
 
     def get_least_used_element(self) -> Element:
-        return min(self.elements, key=lambda x: x.use_count)
+        """
+        Get the element that has been used the least and update its use count
+        :return: an element
+        """
+        element = min(self.elements, key=lambda x: x.use_count)
+        element.use_count += 1
+        return element
 
     def get_closest_element(self, color: tuple) -> Element:
+        """
+        Get the element that is closest to the given color
+        :param color: the color to compare to
+        :return: an element
+        """
         return min(self.elements, key=lambda x: utils.euclidean_distance(x.color, color))
 
     def __str__(self) -> str:

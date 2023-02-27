@@ -40,7 +40,7 @@ class ImageLoader:
 
         for file_path in files_path:
             image = cv2.imread(file_path, cv2.IMREAD_UNCHANGED)
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2BGRA)
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
 
             self.elements.append(self.image_to_element(image))
 
