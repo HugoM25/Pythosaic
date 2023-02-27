@@ -34,7 +34,15 @@ class Maker:
         # get the index of the minimum distance for each pixel
         closest_bucket_indices = np.argmin(dist_result, axis=0)
 
-        return closest_bucket_indices.reshape((image.shape[0], image.shape[1]))
+        # reshape the matrix to the size of the image
+        matrix = closest_bucket_indices.reshape(
+            (image.shape[0], image.shape[1]))
+
+        # if the pixel is transparent, we set the value to -1
+        # activate this line if you want to keep the transparency
+        matrix = np.where(image[:, :, 3] == 0, -1, matrix)
+
+        return matrix
 
     def build_img_from_matrix(self, matrix: np.ndarray, image: np.ndarray, size_img: tuple) -> np.ndarray:
         """
@@ -55,6 +63,9 @@ class Maker:
         # Building the final image
         for i in range(height):
             for j in range(width):
+                # If the pixel is transparent, we skip it
+                if matrix[i, j] == -1:
+                    continue
                 bucket = self.buckets_handler.buckets[matrix[i, j]]
                 element = bucket.get_element(
                     method="random", color=image[i, j])

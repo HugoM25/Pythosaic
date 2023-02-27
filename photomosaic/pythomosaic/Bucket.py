@@ -22,9 +22,9 @@ class Bucket:
         :return: the average color
         """
         if len(self.elements) == 0:
-            return (0, 0, 0)
+            return (0, 0, 0, 1)
 
-        average_color = [0, 0, 0]
+        average_color = [0, 0, 0, 1]
         for element in self.elements:
             average_color[0] += element.color[0]
             average_color[1] += element.color[1]
