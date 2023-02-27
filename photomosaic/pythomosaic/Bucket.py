@@ -1,7 +1,7 @@
 from __future__ import annotations
 import random
-from Utils import euclidean_distance
-from Element import Element
+from . import utils
+from . import Element
 
 
 class Bucket:
@@ -65,7 +65,7 @@ class Bucket:
         return min(self.elements, key=lambda x: x.use_count)
 
     def get_closest_element(self, color: tuple) -> Element:
-        return min(self.elements, key=lambda x: euclidean_distance(x.color, color))
+        return min(self.elements, key=lambda x: utils.euclidean_distance(x.color, color))
 
     def __str__(self) -> str:
         return "Bucket: " + str(self.average_color) + " " + str(len(self.elements))
