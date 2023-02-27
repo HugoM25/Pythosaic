@@ -66,20 +66,12 @@ def image_from_bucket(bucket, size_pics):
 
 if __name__ == "__main__":
     # Load data
-    # images = load_images('assets/memes_assets/')
     images = load_images_from_tileset('assets/dataset_pokemon.png', 80)
     elements = images_to_elements(images)
 
     # Prepare data
     maker = Maker()
     maker.elements_to_buckets(elements)
-    print(maker.buckets)
-
-    # Debug only
-    for bucket in maker.buckets:
-        img = image_from_bucket(bucket, (70, 70))
-        cv2.imshow('image', img)
-        cv2.waitKey(0)
 
     # Load image to mosaic
     image = cv2.imread('target/bulb.png')

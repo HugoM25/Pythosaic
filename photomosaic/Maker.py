@@ -1,3 +1,4 @@
+from __future__ import annotations
 from Bucket import Bucket
 from Element import Element
 from Utils import euclidean_distance
@@ -10,10 +11,14 @@ class Maker:
     def __init__(self) -> None:
         self.buckets = []
 
-    def empty_buckets(self):
+    def empty_buckets(self) -> None:
         self.buckets = []
 
-    def elements_to_buckets(self, elements):
+    def elements_to_buckets(self, elements: Element) -> None:
+        """
+        Sort the elements into buckets
+        :param elements: the list of elements
+        """
         for element in elements:
             # if the element is black only skip it
             if element.color[0] == 0 and element.color[1] == 0 and element.color[2] == 0:
@@ -45,25 +50,7 @@ class Maker:
                 bucket = Bucket([element])
                 self.buckets.append(bucket)
 
-    # def image_to_mosaic(self, image):
-
-    #     bucket_colors = np.array(
-    #         [bucket.average_color for bucket in self.buckets])
-
-    #     height, width, _ = image.shape
-    #     image_reshaped = image.reshape((height * width, 3))
-
-    #     image_norms = np.sqrt(np.sum(image_reshaped**2, axis=1))
-    #     bucket_norms = np.sqrt(np.sum(bucket_colors**2, axis=1))
-    #     image_normed = image_reshaped / image_norms[:, np.newaxis]
-    #     bucket_normed = bucket_colors / bucket_norms[:, np.newaxis]
-
-    #     cos_sim = np.dot(image_normed, bucket_normed.transpose())
-    #     closest_bucket_indices = np.argmax(cos_sim, axis=1)
-
-    #     return closest_bucket_indices.reshape((height, width))
-
-    def build_construction_matrix(self, image):
+    def build_construction_matrix(self, image: np.ndarray) -> np.ndarray:
 
         # get the average color of each bucket
         bucket_colors = np.array(
@@ -78,24 +65,14 @@ class Maker:
 
         return closest_bucket_indices.reshape((image.shape[0], image.shape[1]))
 
-    # def build_construction_matrix(self, image):
-    #     maxtrix = np.zeros((image.shape[0], image.shape[1]), dtype=np.uint8)
-    #     for i in range(image.shape[0]):
-    #         for j in range(image.shape[1]):
-    #             min_dist = 10000
-    #             bucket_target = None
-    #             for bucket in self.buckets:
-    #                 dist = euclidean_distance(
-    #                     bucket.average_color,
-    #                     image[i, j]
-    #                 )
-    #                 if dist < min_dist:
-    #                     bucket_target = bucket
-    #                     min_dist = dist
-    #             maxtrix[i, j] = self.buckets.index(bucket_target)
-    #     return maxtrix
-
-    def build_img_from_matrix(self, matrix, buckets, size_img):
+    def build_img_from_matrix(self, matrix: np.ndarray, buckets: list[Bucket], size_img: tuple) -> np.ndarray:
+        """
+        Build the final image from the construction matrix
+        :param matrix: the construction matrix
+        :param buckets: the list of buckets
+        :param size_img: the size of the image
+        :return: the final image
+        """
         # Calculating the size of the final image
         height, width = matrix.shape
         height_final = height * size_img[0]
@@ -113,13 +90,12 @@ class Maker:
                                    j*size_img[1]:(j+1)*size_img[1], :] = cv2.resize(element.image, size_img)
         return final_image_result
 
-    # def make(self, image):
-    #     matrix = self.image_to_mosaic(image)
-    #     img_result = self.build_img_from_matrix(
-    #         matrix, self.buckets, (30, 30))
-    #     return img_result
-
-    def make(self, image):
+    def make(self, image: np.ndarray) -> np.ndarray:
+        """
+        Make the photomosaic
+        :param image: the image to make the photomosaic from
+        :return: the final image
+        """
         matrix = self.build_construction_matrix(image)
         img_result = self.build_img_from_matrix(
             matrix, self.buckets, (30, 30))
