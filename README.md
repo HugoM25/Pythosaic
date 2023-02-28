@@ -1,9 +1,8 @@
-<h1 align="center">Pythosaic</h1>
-
 <p align="center">
  <img width="30%" src="https://github.com/HugoM25/Img_To_Photomosaics/blob/master/logo.png" alt="Logo pythosaic">
 </p>
 
+<h1 align="center">Pythosaic</h1>
 
 <!-- Table of Contents -->
 # Table of Contents
