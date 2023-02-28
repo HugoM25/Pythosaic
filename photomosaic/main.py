@@ -11,7 +11,7 @@ if __name__ == "__main__":
 
     # Load data
     loader = pm.ImageLoader()
-    loader.load_tileset_image('assets/dataset_pokemon.png', 80)
+    loader.load_tileset_image('assets/dataset_emoji.png', 66)
     # loader.load_folder_images('assets/blocks/')
 
     print('Loading time: ', time.time() - time_process)
@@ -24,7 +24,7 @@ if __name__ == "__main__":
 
     # Load image to mosaic
     image = cv2.imread('target/logo.png', cv2.IMREAD_UNCHANGED)
-    image = cv2.resize(image, (50, 50))
+    image = cv2.resize(image, (30, 30))
 
     time_process = time.time()
 
