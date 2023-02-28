@@ -1,11 +1,49 @@
-# Images to photomosaics
+<h1 align="center">Pythosaic</h1>
 
-## Realized in python, this library will allow you to transform an image into a photomosaic.
+<p align="center">
+ <img width="30%" src="https://github.com/HugoM25/Img_To_Photomosaics/blob/master/logo.png" alt="Logo pythosaic">
+</p>
 
 
-## What is a photomosaic ?
-It is a large image composed by combining other small images . 
+<!-- Table of Contents -->
+# Table of Contents
+- [About the Project](#about-the-project)
+  * [Context](#context)
+  * [Made with](#made-with)
+- [Examples](#examples)
+- [Getting Started](#getting-started)
+  * [Prerequisites](#prerequisites)
+  * [Installation](#installation)
+- [Usage](#usage)
+  * [Commands](#commands)
+  * [Use the editor](#use-the-editor)
+- [License](#license)
+- [Author](#author)
 
-## How to use it ? 
-To use it just download the project and use a python interpreter. more infos coming soon
+
+# About the project
+
+## Context
+
+
+## Made with 
+
+# Examples 
+
+
+# Getting Started 
+
+## Prerequisites
+
+## Installation 
+
+# Usage 
+
+## Commands
+
+## Use the editor
+
+# License
+
+# Author
 
