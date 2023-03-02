@@ -1,18 +1,20 @@
 import numpy as np
 import cv2
-import pythomosaic as pm
+
+from .ImageLoader import ImageLoader
+from .BucketsHandler import BucketsHandler
 
 
-MIN_TILE_SIZE = 20
+MIN_TILE_SIZE = 10
 MIN_VARIATION = 20000000
-TILE_NB = 5
+TILE_NB = 16
 
 
 class MakerStyle2:
-    def __init__(self, image_loader: pm.ImageLoader, bucket_pick_method: str = "random") -> None:
+    def __init__(self, image_loader: ImageLoader, bucket_pick_method: str = "random") -> None:
         self.image_loader = image_loader
         # Load elements in buckets
-        self.buckets_handler = pm.BucketsHandler()
+        self.buckets_handler = BucketsHandler()
         self.buckets_handler.elements_to_buckets(self.image_loader.elements)
         self.bucket_pick_method = bucket_pick_method
 
@@ -27,8 +29,6 @@ class MakerStyle2:
 
         # Calculate the variation
         variation = np.sum(np.square(pixel_array - average_pixel))
-
-        print(variation)
 
         return variation
 
@@ -70,8 +70,8 @@ class MakerStyle2:
             needed_color = self.compute_mean_color(image_part)
 
             # Add theses lines to keep the background transparent
-            # if needed_color[3] < 0.5:
-            #     return np.array([[[0, 0, 0, 0]]*width]*height)
+            if needed_color[3] < 1:
+                return np.array([[[0, 0, 0, 0]]*width]*height)
 
             # Calculate the dist of every buckets to the color of the image part
             dists = np.sum(
@@ -81,7 +81,8 @@ class MakerStyle2:
             # Get the closest bucket
             closest_bucket = self.buckets_handler.buckets[closest_bucket_index]
             # Get a random element from the closest bucket
-            image = closest_bucket.get_element(method="random").image
+            image = closest_bucket.get_element(
+                method="random", color=needed_color).image
 
             return cv2.resize(image, (width, height))
         else:
@@ -90,24 +91,3 @@ class MakerStyle2:
                     image_part[i*height//2:(i+1)*height//2, j*width//2:(j+1)*width//2] = self.recursive_part_fill(
                         image_part[i*height//2:(i+1)*height//2, j*width//2:(j+1)*width//2])
         return image_part
-
-
-if __name__ == "__main__":
-    # Load the image
-    image = cv2.imread("target/bulb.png", cv2.IMREAD_UNCHANGED)
-    image = cv2.resize(image, (1000, 1000))
-
-    # Load data
-    loader = pm.ImageLoader()
-    loader.load_folder_images('assets/Cats/')
-
-    # Prepare data
-    maker = MakerStyle2(loader)
-
-    # Mosaic image
-    image = maker.make(image)
-
-    # Save the result
-    cv2.imwrite('result/result_test.png', image)
-
-    pass
