@@ -3,10 +3,14 @@ from .utils import euclidean_distance
 from .Bucket import Bucket
 from .Element import Element
 
+import numpy as np
+
 
 class BucketsHandler:
     def __init__(self, buckets: list[Bucket] = None) -> None:
         self.buckets = buckets if buckets is not None else []
+
+        self.buckets_average_colors = None
 
     def empty_buckets(self) -> None:
         self.buckets = []
@@ -46,3 +50,7 @@ class BucketsHandler:
             else:
                 bucket = Bucket([element])
                 self.buckets.append(bucket)
+
+        # When done put the buckets color in a numpy array
+        self.buckets_average_colors = np.array(
+            [bucket.average_color for bucket in self.buckets])

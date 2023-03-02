@@ -11,8 +11,8 @@ if __name__ == "__main__":
 
     # Load data
     loader = pm.ImageLoader()
-    loader.load_tileset_image('assets/dataset_emoji.png', 66)
-    # loader.load_folder_images('assets/blocks/')
+    # loader.load_tileset_image('assets/dataset_emoji.png', 66)
+    loader.load_folder_images('assets/Cats/')
 
     print('Loading time: ', time.time() - time_process)
 
