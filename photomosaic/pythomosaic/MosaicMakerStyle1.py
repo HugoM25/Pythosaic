@@ -5,7 +5,7 @@ from .ImageLoader import ImageLoader
 from .BucketsHandler import BucketsHandler
 
 
-class Maker:
+class MosaicMakerStyle1:
     def __init__(self, image_loader: ImageLoader, bucket_pick_method: str = "random") -> None:
         self.image_loader = image_loader
         # Load elements in buckets
