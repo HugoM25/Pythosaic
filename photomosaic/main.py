@@ -39,13 +39,13 @@ def style1():
 
 def style2():
     # Load the image
-    image = cv2.imread("target/A-Cat.jpg", cv2.IMREAD_UNCHANGED)
+    image = cv2.imread("target/bulb.png", cv2.IMREAD_UNCHANGED)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2BGRA)
-    image = cv2.resize(image, (1000, 1000))
+    image = cv2.resize(image, (3000, 3000))
 
     # Load data
     loader = pm.ImageLoader()
-    loader.load_folder_images('assets/Cats/')
+    loader.load_folder_images('assets/pokemon-cards/')
     # loader.load_tileset_image('assets/dataset_pokemon.png', 80)
     # Prepare data
     maker = pm.MakerStyle2(loader)

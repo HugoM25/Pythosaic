@@ -5,9 +5,12 @@ from .ImageLoader import ImageLoader
 from .BucketsHandler import BucketsHandler
 
 
-MIN_TILE_SIZE = 10
-MIN_VARIATION = 20000000
-TILE_NB = 16
+MIN_TILE_SIZE = 100
+MIN_VARIATION = 5
+TILE_NB = 10
+
+MIN_DEVIANCE = 10
+MAX_SPLIT = 2
 
 
 class MakerStyle2:
@@ -17,20 +20,6 @@ class MakerStyle2:
         self.buckets_handler = BucketsHandler()
         self.buckets_handler.elements_to_buckets(self.image_loader.elements)
         self.bucket_pick_method = bucket_pick_method
-
-    def calculate_variation(self, pixel_array: np.ndarray) -> float:
-        """
-        Calculate the variation of a pixel array
-        :param pixel_array: The pixel array
-        :return: The variation
-        """
-        # Calculate the average pixel value
-        average_pixel = np.average(pixel_array)
-
-        # Calculate the variation
-        variation = np.sum(np.square(pixel_array - average_pixel))
-
-        return variation
 
     def make(self, image: np.ndarray):
         # Split the image in n squares
@@ -63,9 +52,55 @@ class MakerStyle2:
         color = np.mean(image_masked, axis=0)
         return tuple(color)
 
-    def recursive_part_fill(self, image_part):
+    def compute_standard_deviation_val(self, pixel_array: np.ndarray) -> float:
+        """
+        Compute the standard deviation of the color of an image
+        :param image: the image
+        :return: the standard deviation of the color
+        """
+        mask = pixel_array[:, :, 3] != 0
+
+        image_masked = pixel_array[mask]
+
+        # Check if image_masked is empty
+        if image_masked.shape[0] == 0:
+            return -1
+
+        color = np.std(image_masked, axis=0)
+        deviance = np.mean(color)
+
+        return deviance
+
+    def is_there_too_much_transparent(self, image_part: np.ndarray) -> bool:
+        """
+        Check if there is too much transparent pixels in an image
+        :param image_part: the image
+        :return: True if there is too much transparent pixels, False otherwise
+        """
+        # Calculate the proportion of non fully transparent pixels
+        mask = image_part[:, :, 3] != 0
+        image_masked = image_part[mask]
+
+        # Check if image_masked is empty
+        if image_masked.shape[0] == 0:
+            return False
+
+        proportion = image_masked.shape[0] / \
+            (image_part.shape[0]*image_part.shape[1])
+
+        # If the proportion is too low, we split the image
+        if proportion < 0.5:
+            return True
+        else:
+            return False
+
+    def recursive_part_fill(self, image_part, depth=0):
         height, width, _ = image_part.shape
-        if height < MIN_TILE_SIZE or self.calculate_variation(image_part) < MIN_VARIATION:
+
+        deviation_image = self.compute_standard_deviation_val(image_part)
+        is_mostly_transparent = self.is_there_too_much_transparent(image_part)
+
+        if depth >= MAX_SPLIT or (deviation_image < MIN_DEVIANCE and is_mostly_transparent == False):
             # Find the closest bucket to the color of the image part
             needed_color = self.compute_mean_color(image_part)
 
@@ -89,5 +124,5 @@ class MakerStyle2:
             for i in range(2):
                 for j in range(2):
                     image_part[i*height//2:(i+1)*height//2, j*width//2:(j+1)*width//2] = self.recursive_part_fill(
-                        image_part[i*height//2:(i+1)*height//2, j*width//2:(j+1)*width//2])
+                        image_part[i*height//2:(i+1)*height//2, j*width//2:(j+1)*width//2], depth=depth+1)
         return image_part
